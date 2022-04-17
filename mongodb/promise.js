@@ -5,9 +5,25 @@ const addSum = (a, b) =>
         reject("a, b must be numbers");
       }
       resolve(a + b);
-    }, 3000);
+    }, 1000);
   });
 
-addSum(10, 20)
-  .then((sum) => console.log({ sum }))
-  .catch((error) => console.log({ error }));
+// addSum(10, 10)
+//   .then((sum1) => addSum(sum1, 1))
+//   .then((sum1) => addSum(sum1, 1))
+//   .then((sum1) => addSum(sum1, 1))
+//   .then((sum1) => addSum(sum1, 1))
+//   .then((sum) => console.log({ sum }))
+//   .catch((error) => console.log({ error }));
+
+const totalSum = (async = () => {
+  try {
+    let sum = addSum(10, 10);
+    let sum2 = addSum(sum, 10);
+    console.log({ sum });
+  } catch (err) {
+    if (err) console.log({ err });
+  }
+});
+
+console.log(totalSum());
