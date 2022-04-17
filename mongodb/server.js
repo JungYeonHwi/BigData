@@ -1,18 +1,19 @@
 const express = require("express");
 const app = express();
 
-const users = [];
-
 app.use(express.json());
 
-app.get("/user", function (req, res) {
-  return res.send({ users: users });
-});
+const users = [];
 
 app.post("/user", function (req, res) {
-  console.log(res.body);
-  users.push({ name: req.body.name, age: req.body.age });
+  let user = req.body;
+  users.push(user);
+  console.log({ user });
   return res.send({ success: true });
+});
+
+app.get("/user", function (req, res) {
+  return res.send(users);
 });
 
 app.listen(3000, function () {
