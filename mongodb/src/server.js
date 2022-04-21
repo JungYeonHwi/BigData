@@ -15,8 +15,14 @@ const server = async () => {
     console.log("MongoDB connected");
     app.use(express.json());
 
-    app.get("/user", (req, res) => {
-      // return res.send(users);
+    app.get("/user", async (req, res) => {
+      try {
+        const users = await User.find({});
+        return res.send({ users });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+      }
     });
 
     app.post("/user", async (req, res) => {
