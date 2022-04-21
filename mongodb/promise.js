@@ -16,14 +16,14 @@ const addSum = (a, b) =>
 //   .then((sum) => console.log({ sum }))
 //   .catch((error) => console.log({ error }));
 
-const totalSum = (async = () => {
+const totalSum = async () => {
   try {
     let sum = addSum(10, 10);
     let sum2 = addSum(sum, 10);
-    console.log({ sum });
+    console.log({ sum2 });
   } catch (err) {
     if (err) console.log({ err });
   }
-});
+};
 
 console.log(totalSum());
