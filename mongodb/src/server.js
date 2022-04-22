@@ -16,6 +16,19 @@ const server = async () => {
     console.log("MongoDB connected");
     app.use(express.json());
 
+    app.get("/user/:userId", async (req, res) => {
+      try {
+        const { userId } = req.params;
+        if (!mongoose.isValidObjectId(userId))
+          return res.status(400).send({ err: "invalid userId" });
+        const user = await user.findOne({ _id: userId });
+        return res.send({ user });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+      }
+    });
+
     app.get("/user", async (req, res) => {
       try {
         const users = await User.find({});
