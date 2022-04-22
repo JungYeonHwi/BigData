@@ -57,6 +57,40 @@ const server = async () => {
       }
     });
 
+    app.delete("/user/:userId", async (req, res) => {
+      try {
+        const { userId } = req.params;
+        if (!mongoose.isValidObjectId(userId))
+          return res.status(400).send({ err: "invalid userId" });
+        const user = await User.findOneAndDelete({ _id });
+        return res.send({ user });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+      }
+    });
+
+    app.put("/user/:userId", async (req, res) => {
+      try {
+        const { userId } = req.params;
+        if (!mongoose.isValidObjectId(userId))
+          return res.status(400).send({ err: "invalid userId" });
+        const { age } = req.body;
+        if (!age) return res.status(400).send({ err: "age is required" });
+        if (typeof age !== "number")
+          return res.status(400).send({ err: "age must be a number" });
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { $set: { age } },
+          { new: true }
+        );
+        return res.send({ user });
+      } catch (err) {
+        console.log(err);
+        return res.status(500).send({ err: err.message });
+      }
+    });
+
     app.listen(3000, () => console.log("server listening on port 3000"));
   } catch (err) {
     console.log(err);
