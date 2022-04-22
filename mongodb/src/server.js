@@ -13,6 +13,7 @@ const server = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
+    mongoose.set("debug", true);
     console.log("MongoDB connected");
     app.use(express.json());
 
@@ -75,15 +76,28 @@ const server = async () => {
         const { userId } = req.params;
         if (!mongoose.isValidObjectId(userId))
           return res.status(400).send({ err: "invalid userId" });
-        const { age } = req.body;
-        if (!age) return res.status(400).send({ err: "age is required" });
-        if (typeof age !== "number")
+        const { age, name } = req.body;
+        if (!age && !namve)
+          return res.status(400).send({ err: "age or name is required" });
+
+        if (age && typeof age !== "number")
           return res.status(400).send({ err: "age must be a number" });
-        const user = await User.findByIdAndUpdate(
-          userId,
-          { $set: { age } },
-          { new: true }
-        );
+        if (
+          name &&
+          typeof name.first !== "string" &&
+          typeof name.last == "string"
+        )
+          return res
+            .status(400)
+            .send({ err: "first and last name are strings" });
+
+        let updateBody = {};
+        if (age) updateBody.age = age;
+        if (name) updateBody.name = name;
+
+        const user = await User.findByIdAndUpdate(userId, updateBody, {
+          new: true,
+        });
         return res.send({ user });
       } catch (err) {
         console.log(err);
